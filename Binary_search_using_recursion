@@ -1,0 +1,32 @@
+#include<iostream>
+using namespace std;
+void bs(int l,int r,int key,int arr[])
+{
+	int mid=(l+r)/2;
+	if(l>r)
+	{
+		return;
+	}
+	else if(arr[mid]==key)
+	{
+		//cout<<"\n"<<arr[mid];
+		cout<<"\nValue fount at "<<mid;
+	}
+	else if(key<arr[mid])
+	{
+		bs(l,r-1,key,arr);
+	}
+	else if(key>arr[mid])
+	{
+		bs(l+1,r,key,arr);
+	}
+	return;
+	
+	
+
+}
+int main()
+{
+	int arr[]={1,2,3,4,5,6,7,8,9,10};
+	bs(0,10,10,arr);
+}
