@@ -1,0 +1,216 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Node 
+{
+public:
+    char data;
+    Node* next;
+    Node(char d) 
+	{
+        data = d;
+        next = NULL;
+    }
+};
+
+class Stack 
+{
+public:
+    Node* top;
+    Stack() 
+	{
+        top = NULL;
+    }
+    ~Stack() 
+	{
+        while (top!=NULL) 
+		{
+            Node* temp = top;
+            top = temp->next;
+            delete temp;
+        }
+    }
+
+    void push(char value) 
+	{
+        Node* newNode = new Node(value);
+        newNode->next = top;
+        top = newNode;
+    }
+
+    char pop() 
+	{
+        if (isEmpty()) 
+		{
+            return '\0';
+        }
+        Node* temp = top;
+        char data = temp->data;
+        top = temp->next;
+        delete temp;
+        return data;
+    }
+
+    char peek() 
+	{
+        if (isEmpty()) {
+            return '\0';
+        }
+        return top->data;
+    }
+
+    bool isEmpty() 
+	{
+        return top == NULL;
+    }
+
+    void printStack() 
+	{
+        Node* temp = top;
+        cout << "Current Stack: ";
+        while (temp!=NULL) 
+		{
+            cout << "->" << temp->data;
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+};
+
+int getPrecedence(char c) 
+{
+    if (c == '*' || c == '/')
+        return 2;
+    else if (c == '+' || c == '-')
+        return 1;
+    else
+        return 0;
+}
+bool isNum(char c)
+{
+	if(c=='0'||c=='1'||c=='2'||c=='3'||c=='4'||c=='5'||c=='6'||c=='7'||c=='8'||c=='9')
+	{
+		
+		return true;
+	}
+	else
+	{
+	
+		return false;
+	}
+}
+
+string infixToPostfix(string infix) 
+{
+    string postfix;
+    Stack operatorStack;
+    cout << "Infix to Postfix Conversion:" << endl;
+    for (int i = 0; i < infix.length(); i++) 
+	{
+        char c = infix[i];
+        if (isNum(c))
+		{
+            postfix += c;
+            cout << "Current Postfix: " << postfix << endl;
+        } 
+		else if (c == '+' || c == '-' || c == '*' || c == '/') 
+		{
+            while (!operatorStack.isEmpty() && getPrecedence(operatorStack.peek()) >= getPrecedence(c)) 
+			{
+                postfix += operatorStack.pop();
+                cout << "Current Postfix: " << postfix << endl;
+            }
+            operatorStack.push(c);
+            operatorStack.printStack(); 
+        } 
+		else if (c == '(') 
+		{
+            operatorStack.push(c);
+            operatorStack.printStack(); 
+        } 
+		else if (c == ')') 
+		{
+            while (!operatorStack.isEmpty() && operatorStack.peek() != '(') 
+			{
+                postfix += operatorStack.pop();
+                cout << "Current Postfix: " << postfix << endl;
+            }
+            if (!operatorStack.isEmpty() && operatorStack.peek() == '(') 
+			{
+                operatorStack.pop();
+                operatorStack.printStack(); 
+            }
+        }
+        else if(c==' ')
+        {
+        	postfix +=' ';
+		}
+    }
+    while (!operatorStack.isEmpty()) 
+	{
+        postfix += operatorStack.pop();
+        cout << "Current Postfix: " << postfix << endl;
+    }
+    return postfix;
+}
+
+string reverseString( string str)
+{
+    string reversedStr;
+    for (int i = str.length() - 1; i >= 0; i--) 
+	{
+        if (str[i] == '(') 
+		{
+            reversedStr += ')';
+        } 
+		else if (str[i] == ')') 
+		{
+            reversedStr += '(';
+        } 
+		else 
+		{
+            reversedStr += str[i];
+        }
+    }
+    return reversedStr;
+}
+
+string infixToPrefix(string infix) 
+{
+    string reversedInfix = reverseString(infix);
+
+    string postfix = infixToPostfix(reversedInfix);
+
+    string prefix = reverseString(postfix);
+    return prefix;
+}
+
+int main() 
+{
+    string infix = "24 * (490 + 6 / 12 )";
+    cout << "Infix Expression: " << infix << endl;
+     int choice=0;
+    cout<<"\nEnter\n1.Infinix To postix\n2.Infix to Prefix:";
+    cin>>choice;
+   
+    if(choice==1)
+    {
+    	string postfix = infixToPostfix(infix);
+    	cout << "Final Postfix Expression: " << postfix << endl;
+
+	}
+	else if(choice==2)
+	{
+		string prefix = infixToPrefix(infix);
+    cout << "Final Prefix Expression: " << prefix << endl;
+	}
+	else
+	{
+		cout<<"\nInvalid input";
+	}
+    
+    
+
+    return 0;
+}
