@@ -1,0 +1,199 @@
+#include<iostream>
+using namespace std;
+class Node{
+	public:
+		int key;
+		Node* next;
+		Node(int k)
+		{
+			key=k;
+			next=NULL;
+		}
+};
+class List{
+	public:
+		Node* root;
+		List()
+		{
+			root=NULL;
+		}
+		void insert(int key)
+		{
+
+			Node* temp=root;
+			Node* n=new Node(key);
+			if(temp==NULL)
+			{
+				root=n;
+				return;
+			}
+			while(temp->next!=NULL)
+			{
+				temp=temp->next;
+			}
+			temp->next=n;
+		}
+		void deletekey(int k) {
+    if (root == NULL) {
+        return;
+    }
+
+    Node* temp = root;
+    Node* prev = NULL;
+
+    if (temp != NULL && temp->key == k) {
+        root = temp->next;
+        delete temp;
+        return;
+    }
+
+    while (temp != NULL && temp->key != k) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        return;
+    }
+
+    prev->next = temp->next;
+    delete temp;
+}
+		void search(int k)
+		{
+			cout<<"\n";
+			Node* temp=root;
+			while(temp!=NULL)
+			{
+				if(temp->key==k)
+				{
+					cout<<"\nValue found";
+					return;
+				}
+				temp=temp->next;
+			}
+		}
+		void print()
+		{
+			Node* temp=root;
+			cout<<"\n";
+			while(temp!=NULL)
+			{
+				
+					cout<<"->"<<temp->key;
+					temp=temp->next;
+					
+			}
+		}
+		void reverse() {
+    if (root == NULL) {
+        return;
+    }
+
+    Node* prev = NULL;
+    Node* current = root;
+    Node* next = NULL;
+
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+
+    root = prev;
+   // cout << "\n-" << root->key;
+}
+void sort()
+{
+	Node* temp=root;
+	if(root==NULL)
+	{
+		return;
+	}
+	bool swap=true;
+	do
+	{
+		temp=root;
+			swap=false;
+		while(temp->next!=NULL)
+	{
+	
+
+		if(temp->key>temp->next->key)
+		{
+			//cout<<"bbub";
+			int key=temp->key;
+			temp->key=temp->next->key;
+			temp->next->key=key;
+			swap=true;
+		}
+
+		temp=temp->next;
+	}
+
+}
+while(swap);
+	}
+	void group()
+	{
+		Node* temp=root;
+		if(root==NULL)
+		{
+			return;
+		}
+		Node* o=root;
+		Node* e=root->next;
+		temp=e;
+		Node* oo=o;
+		while(o->next!=NULL&&e->next!=NULL)
+		{
+			o->next=e->next;
+			o=e->next;
+			e->next=o->next;
+			e=e->next;
+
+			
+		}
+		root=oo;
+
+		o->next=temp;
+	}
+	
+	
+		
+};
+int main()
+{
+	List l1;
+	l1.insert(5);
+	l1.insert(6);
+	l1.insert(8);
+	l1.insert(2);
+	l1.insert(1);
+	l1.insert(0);
+	l1.insert(8);
+	l1.insert(12);
+	l1.insert(23);
+	l1.insert(76);
+	l1.insert(9);
+	l1.print();
+	cout<<"\nVal 1";
+	l1.deletekey(1);
+	l1.print();
+	cout<<"\nVal 5";
+	l1.deletekey(5);
+	l1.print();
+	cout<<"\nVal 9";
+	l1.deletekey(9);
+	l1.print();
+	l1.deletekey(123);
+	l1.reverse();
+	l1.print();
+	cout<<"\nafter sorting";
+	l1.sort();
+	l1.insert(99);
+	l1.print();
+	l1.group();
+	l1.print();
+}
